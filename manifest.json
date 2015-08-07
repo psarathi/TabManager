@@ -7,6 +7,9 @@
     "default_icon": "assets/images/tabManager.png",
     "default_popup": "markup/tabManager.html"
   },
+  "icons": {
+    "48": "assets/images/tabManager48.png"
+  },
   "background": {
     "page": "markup/background.html",
     "persistent": false
