@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html data-ng-app="tabManager">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>My Tabs</title>
+    <script src="../assets/js/vendor/angularjs.min.js"></script>
+    <script src="../assets/js/vendor/underscore.min.js"></script>
+    <script src="../assets/js/tabManager.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/tabManager.css">
+</head>
+<body data-ng-controller="tabCtrl">
+<div class="container">
+    <div ng-hide="showLoader">
+        <div class="row">
+            <input type="text" class="form-control" placeholder="search tabs by name and urls..." ng-model="query">
+            <br>
+            <button ng-click="closeAllTabs()" class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Close All ({{tabs.length}}) Tabs
+            </button>
+        </div>
+        <br/>
+        <table class="table table-hover table-bordered">
+            <tr ng-repeat="tab in tabs | filter:query">
+                <td><img class="icon" ng-src="{{tab.favIconUrl}}" alt=""/></td>
+                <td>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="closeTab(tab.id)"></span>
+                </td>
+                <td ng-click="goToTab(tab.id)" style="word-wrap: break-word;width: 100px">
+                    {{tab.title}}
+                    <br>
+                    <span>{{tab.url}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

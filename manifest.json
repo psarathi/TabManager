@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "My Tab Manager",
+  "description": "This extension will show the list of open tabs and allow the user to manage it",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "assets/images/tabManager.png",
+    "default_popup": "markup/tabManager.html"
+  },
+  "background": {
+    "page": "markup/background.html",
+    "persistent": false
+  },
+  "permissions": [
+    "tabs",
+    "background"
+  ]
+}
