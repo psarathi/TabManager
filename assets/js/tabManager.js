@@ -17,6 +17,11 @@ angular.module('tabManager', []).controller('tabCtrl', ['$scope', 'tabService', 
     };
     chrome.browserAction.onClicked.addListener(function (tab) {
     });
+    $scope.openNewTab = function () {
+        tabService.openTab({}).then(function (tab) {
+            $scope.tabs.push(tab);
+        });
+    };
     $scope.init();
 }
 ]).factory('tabService', ['$q', function ($q) {
@@ -47,10 +52,21 @@ angular.module('tabManager', []).controller('tabCtrl', ['$scope', 'tabService', 
         });
         return deferred.promise;
     };
+    var _openTab = function (tabInfo) {
+        if (!tabInfo) {
+            return;
+        }
+        var deferred = $q.defer();
+        chrome.tabs.create(tabInfo, function (tab) {
+            deferred.resolve(tab);
+        });
+        return deferred.promise;
+    };
     return {
         goToTab: _goToTab,
         closeTab: _closeTab,
         closeAllTabs: _closeAllTabs,
-        getTabs: _getTabs
+        getTabs: _getTabs,
+        openTab: _openTab
     }
 }]);
