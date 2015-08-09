@@ -15,10 +15,16 @@ angular.module('tabManager', []).controller('tabCtrl', ['$scope', 'tabService', 
             return tab.id === tabId;
         });
     };
-    chrome.browserAction.onClicked.addListener(function (tab) {
-    });
     $scope.openNewTab = function () {
         tabService.openTab({}).then(function (tab) {
+            $scope.tabs.push(tab);
+        });
+    };
+    $scope.searchGoogle = function() {
+        if(!($scope.query)) {
+            return;
+        }
+        tabService.openTab({url:"https://www.google.com/search?q=" + $scope.query}).then(function (tab) {
             $scope.tabs.push(tab);
         });
     };

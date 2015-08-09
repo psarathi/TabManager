@@ -13,7 +13,15 @@
 <div class="container">
     <div ng-hide="showLoader">
         <br>
-        <input type="text" class="form-control" placeholder="search tabs by name and urls..." ng-model="query">
+
+        <div class="input-group">
+            <input type="text" class="form-control"
+                   placeholder="search tabs by name/urls or enter search terms and click Google..." ng-model="query">
+
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-info" ng-click="searchGoogle()">Google</button>
+            </div>
+        </div>
         <br>
 
         <button ng-click="closeAllTabs()" class="btn btn-danger btn-sm">
