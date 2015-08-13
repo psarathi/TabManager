@@ -20,22 +20,43 @@ angular.module('tabManager', []).controller('tabCtrl', ['$scope', 'tabService', 
             $scope.tabs.push(tab);
         });
     };
-    $scope.searchGoogle = function() {
-        if(!($scope.query)) {
+    $scope.searchGoogle = function () {
+        if (!($scope.query)) {
             return;
         }
-        tabService.openTab({url:"https://www.google.com/search?q=" + $scope.query}).then(function (tab) {
+        tabService.openTab({url: "https://www.google.com/search?q=" + $scope.query}).then(function (tab) {
+            $scope.tabs.push(tab);
+        });
+    };
+    $scope.openChromeSettings = function () {
+        tabService.openTab({url: "chrome://settings"}).then(function (tab) {
+            $scope.tabs.push(tab);
+        });
+    };
+    $scope.openChromeExtensions = function () {
+        tabService.openTab({url: "chrome://extensions"}).then(function (tab) {
+            $scope.tabs.push(tab);
+        });
+    };
+    $scope.openChromeAllURLs = function () {
+        tabService.openTab({url: "chrome://chrome-urls/"}).then(function (tab) {
+            $scope.tabs.push(tab);
+        });
+    };
+    $scope.openChromeInternalDNS = function () {
+        tabService.openTab({url: "chrome://net-internals/#dns"}).then(function (tab) {
             $scope.tabs.push(tab);
         });
     };
     $scope.init();
 }
 ]).factory('tabService', ['$q', function ($q) {
-    var _goToTab = function (tabId) {
-        if (!tabId) {
+    var _goToTab = function (tab) {
+        if (!tab) {
             return;
         }
-        chrome.tabs.update(tabId, {selected: true});
+        chrome.tabs.highlight({windowId: tab.windowId, tabs: [tab.index]});
+        chrome.windows.update(tab.windowId, {focused: true});
     };
 
     var _closeTab = function (tabId) {
@@ -53,7 +74,7 @@ angular.module('tabManager', []).controller('tabCtrl', ['$scope', 'tabService', 
     };
     var _getTabs = function () {
         var deferred = $q.defer();
-        chrome.tabs.getAllInWindow(function (result) {
+        chrome.tabs.query({}, function (result) {
             deferred.resolve(result);
         });
         return deferred.promise;

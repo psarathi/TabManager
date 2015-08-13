@@ -29,8 +29,26 @@
             Close All ({{tabs.length}}) Tabs
         </button>
         <button ng-click="openNewTab()" class="btn btn-success btn-sm">
-            <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             Open New Tab
+        </button>
+        <button ng-click="openChromeExtensions()" class="btn btn-primary btn-sm">
+            <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span>
+            Chrome Extensions
+        </button>
+        <br/>
+        <br/>
+        <button ng-click="openChromeSettings()" class="btn btn-warning btn-sm">
+            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+            Chrome Settings
+        </button>
+        <button ng-click="openChromeInternalDNS()" class="btn btn-danger btn-sm">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            Chrome DNS Flush
+        </button>
+        <button ng-click="openChromeAllURLs()" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
+            Chrome All URLs
         </button>
         <br/>
         <br/>
@@ -43,7 +61,7 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </td>
-                <td ng-click="goToTab(tab.id)" style="word-wrap: break-word;width: 100px">
+                <td ng-click="goToTab(tab)" style="word-wrap: break-word;width: 100px">
                     {{tab.title}}
                     <br>
                     <span>{{tab.url}}</span>
