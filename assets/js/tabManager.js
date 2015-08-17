@@ -48,6 +48,27 @@ angular.module('tabManager', []).controller('tabCtrl', ['$scope', 'tabService', 
             $scope.tabs.push(tab);
         });
     };
+    $scope.openInIncognito = function () {
+        var tabUrl = "";
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+            tabUrl = tabs[0].url;
+        });
+        tabService.getFirstIncognitoWindow().then(function (window) {
+            if (tabUrl.indexOf("chrome://") > -1) {
+                console.info("Chrome Limitation - Cannot open urls with chrome:// scheme in incognito window")
+                return;
+            }
+            if (!window) {
+                chrome.windows.create({url: tabUrl, incognito: true}, function (window) {
+                    chrome.windows.update(window.id, {focused: true});
+                });
+                return;
+            }
+            chrome.tabs.create({windowId: window.id, url: tabUrl});
+            chrome.windows.update(window.id, {focused: true});
+        });
+
+    };
     $scope.init();
 }
 ]).factory('tabService', ['$q', function ($q) {
@@ -89,11 +110,33 @@ angular.module('tabManager', []).controller('tabCtrl', ['$scope', 'tabService', 
         });
         return deferred.promise;
     };
+    var _getAllWindows = function () {
+        var deferred = $q.defer();
+        chrome.windows.getAll({populate: false}, function (windows) {
+            deferred.resolve(windows);
+        });
+        return deferred.promise;
+    };
+    var _getFirstIncognitoWindow = function () {
+        var deferred = $q.defer();
+        _getAllWindows().then(function (windows) {
+            for (var i = 0; i < windows.length; i++) {
+                if (windows[i].incognito) {
+                    deferred.resolve(windows[i]);
+                    return;
+                }
+            }
+            deferred.resolve(null);
+        });
+        return deferred.promise;
+    };
     return {
         goToTab: _goToTab,
         closeTab: _closeTab,
         closeAllTabs: _closeAllTabs,
         getTabs: _getTabs,
-        openTab: _openTab
+        openTab: _openTab,
+        getAllWindows: _getAllWindows,
+        getFirstIncognitoWindow: _getFirstIncognitoWindow
     }
 }]);
